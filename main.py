@@ -1,20 +1,20 @@
-import time
-
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
+from lxml import etree
 
-
-app = FastAPI()
+app = FastAPI(title="XML API")
 
 
 @app.middleware("http")
 async def process_time_handler(request: Request, call_next):
     if request.url == "http://127.0.0.1:8000/xml":
-        start_point = time.time()
         response = ''
         try:
             route = await request.json()
+            if route["method"] not in allowed_methods:
+                return JSONResponse(status_code=404, content="Method does not exist")
             req = await create_req(route)
+            print(req)
             response = await(eval(req))
         except (NameError, TypeError, SyntaxError) as ex:
             if isinstance(ex, NameError):
@@ -23,10 +23,8 @@ async def process_time_handler(request: Request, call_next):
                 return JSONResponse(status_code=404, content="Error with arguments")
             elif isinstance(ex, SyntaxError):
                 return JSONResponse(status_code=404, content="Method name is void")
-        end_point = time.time() - start_point
         if isinstance(response, dict):
             response = JSONResponse(response)
-        response.headers["X-Process-Time"] = str(end_point)
         return response
     else:
         response = await call_next(request)
@@ -55,22 +53,6 @@ async def create_req(route: dict):
     req += ')'
     return req
 
-'''
-Second Variant:
-Example in middleware:
 
-route = await request.json()
-response = await routes[route['method']]['method']()
+allowed_methods = ["say_gg", "hello_world"]
 
-
-routes = {
-    'say_gg': {
-      "method": say_gg,
-      "attrs": [name]
-    },
-    'hello_world': {
-      "method": hello_world,
-      "attrs": []
-    }
-}
-'''
