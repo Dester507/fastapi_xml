@@ -26,4 +26,8 @@ async def process_time_handler(request: Request, call_next):
     except:
         return JSONResponse(status_code=404, content="Bad response")
 
+
+async def make_json():
+    pass
+
 app.mount("/xml", rpc_api)
