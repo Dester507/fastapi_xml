@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<methodCall>
+    <methodName>say_gg</methodName>
+    <params>
+        <param name="name">
+            <value><str>Tolik</str></value>
+        </param>
+        <param name="age">
+            <value><int>17</int></value>
+        </param>
+    </params>
+</methodCall>
