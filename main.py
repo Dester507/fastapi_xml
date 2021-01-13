@@ -18,7 +18,6 @@ async def process_time_handler(request: Request, call_next):
     except TypeError:
         return JSONResponse(status_code=404, content="Error with arguments")
     except SyntaxError as ex:
-        print(ex)
         return JSONResponse(status_code=404, content="Method name is void")
     try:
         if isinstance(response, dict):
@@ -38,7 +37,6 @@ async def make_json(xml_str):
         pa_type = pa.getchildren()[0].getchildren()[0].tag
         pa_attr = pa.getchildren()[0].getchildren()[0].text
         attrs[pa_name] = await switch_type(pa_attr, pa_type)
-        print(attrs)
     return {"method": method_name, "attrs": attrs}
 
 
