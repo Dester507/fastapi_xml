@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
-from lxml import etree as et
+
+from parser import handle_xml
 
 app = FastAPI(title="Main API", description="Default api for simple requests")
 
@@ -15,17 +16,16 @@ rpc_api = FastAPI(title="Support RPC-XML API", description="Mounted app for rpc-
 
 @rpc_api.middleware("http")
 async def process_time_handler(request: Request, call_next):
-    import methods
     if request.url == "http://127.0.0.1:8000/xml/":
         try:
             xml_str = await request.body()
-            route = await make_json(xml_str)
-            response = await getattr(methods, route['method'])(**route["attrs"])
+            response = await handle_xml(xml_str)
+            print(response)
         except NameError:
             return JSONResponse(status_code=404, content="Method does not exist")
         except TypeError:
             return JSONResponse(status_code=404, content="Error with arguments")
-        except SyntaxError as ex:
+        except SyntaxError:
             return JSONResponse(status_code=404, content="Method name is void")
         try:
             if isinstance(response, dict):
@@ -37,33 +37,5 @@ async def process_time_handler(request: Request, call_next):
         response = await call_next(request)
         return response
 
-
-async def make_json(xml_str):
-    tree = et.XML(xml_str)
-    method_name = tree.xpath("//methodName")[0].text
-    params = tree.xpath("//params/param")
-    attrs = {}
-    for pa in params:
-        pa_name = pa.get('name')
-        pa_type = pa.getchildren()[0].getchildren()[0].tag
-        pa_attr = pa.getchildren()[0].getchildren()[0].text
-        attrs[pa_name] = await switch_type(pa_attr, pa_type)
-    return {"method": method_name, "attrs": attrs}
-
-
-async def switch_type(param, type_pa):
-    try:
-        if type_pa == "str":
-            str(param)
-        elif type_pa == "int":
-            int(param)
-        elif type_pa == 'float':
-            float(param)
-        elif type_pa == "bool":
-            bool(param)
-        return param
-    except:
-        # JSONResponse 'Attr type error'
-        pass
 
 app.mount("/xml", rpc_api)

@@ -67,7 +67,7 @@ def _(value):
     return et.Element("nil")
 
 
-@py2xml.regiseter(list)
+@py2xml.register(list)
 @py2xml.register(tuple)
 @py2xml.register(set)
 @py2xml.register(frozenset)

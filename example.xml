@@ -1,12 +1,21 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ASCII"?>
 <methodCall>
-    <methodName>say_gg</methodName>
+    <methodName>method_name</methodName> # Method Name
     <params>
-        <param name="name">
-            <value><str>Tolik</str></value>
+        <param>
+            <value>
+                <string> # Value Type
+                    TEXT
+                </string>
+            </value>
         </param>
-        <param name="age">
-            <value><int>17</int></value>
+
+        <param>
+            <value>
+                <int> # Value Type
+                    NUMBER
+                </int>
+            </value>
         </param>
     </params>
 </methodCall>
