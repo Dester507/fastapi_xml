@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
-from parser import handle_xml
+from xml_api.parser import handle_xml
 
 app = FastAPI(title="Main API", description="Default api for simple requests")
 
