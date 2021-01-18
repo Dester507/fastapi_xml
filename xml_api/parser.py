@@ -1,5 +1,6 @@
 import asyncio
 
+from fastapi.responses import JSONResponse
 from lxml import etree as et
 
 from .xml_parser_settings import xml2py, schema
@@ -23,10 +24,10 @@ async def handle_xml(xml_text):
         method_namespace = f"routes.{method_name[0]}"
         response = await PathOperationFactory.factory(method_namespace, method_name[1], *args, **kwargs)
         if response is None:
-            return send_response(await create_bad_response(""))
-        return response
+            return await create_bad_response("Method does not exist.")
+        return await create_good_response(response)
     except:
-        await send_response(await create_bad_response(""))
+        return await create_bad_response("Error with parse xml request.")
 
 
 async def parser_run(xml_text):
@@ -38,7 +39,7 @@ async def parser_run(xml_text):
             xml_text
         )
     except et.DocumentInvalid as ex:
-        await send_response(create_bad_response)  # ErrorResponse
+        return await create_bad_response("Invalid xml.")  # ErrorResponse
 
 
 def parser(xml_text):
@@ -48,13 +49,9 @@ def parser(xml_text):
     return root
 
 
-async def create_good_response(json_format_response):  # Response
-    pass
+async def create_good_response(json_msg):  # Response
+    return JSONResponse(status_code=404, content=json_msg)
 
 
-async def create_bad_response(json_format_response):  # Error Response XML
-    pass
-
-
-async def send_response(response):
-    pass
+async def create_bad_response(json_msg):  # Error Response XML
+    return JSONResponse(status_code=200, content=json_msg)

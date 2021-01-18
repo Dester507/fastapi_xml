@@ -20,7 +20,6 @@ async def process_time_handler(request: Request, call_next):
         try:
             xml_str = await request.body()
             response = await handle_xml(xml_str)
-            print(response)
         except NameError:
             return JSONResponse(status_code=404, content="Method does not exist")
         except TypeError:

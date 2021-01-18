@@ -4,7 +4,7 @@ from .plugin import load_plugins
 
 import routes
 
-PLUGINS = await load_plugins(routes)
+PLUGINS = load_plugins(routes)
 
 
 class PathOperationFactory:
