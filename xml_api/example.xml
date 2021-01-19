@@ -17,5 +17,11 @@
                 </int>
             </value>
         </param>
+
+        <param>
+            <value>
+                <nil/> # For Null attrs
+            </value>
+        </param>
     </params>
 </methodCall>
