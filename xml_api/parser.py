@@ -50,8 +50,8 @@ def parser(xml_text):
 
 
 async def create_good_response(json_msg):  # Response
-    return JSONResponse(status_code=404, content=json_msg)
+    return JSONResponse(status_code=200, content=json_msg)
 
 
 async def create_bad_response(json_msg):  # Error Response XML
-    return JSONResponse(status_code=200, content=json_msg)
+    return JSONResponse(status_code=404, content=json_msg)
