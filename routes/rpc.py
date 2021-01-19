@@ -19,3 +19,7 @@ async def say_gg(name: str = Body(...), age: int = Body(...), surname: Optional[
         return {"msg": "gg", "name": name, "age": age, "father": father}
     else:
         return {"msg": "gg", "name": name, "age": age}
+
+
+def return_routes_for_openapi():
+    return rpc_api.routes

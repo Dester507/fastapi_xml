@@ -1,7 +1,9 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
+from fastapi.openapi.utils import get_openapi
 
 from xml_api.parser import handle_xml
+
 
 app = FastAPI(title="Main API", description="Default api for simple requests")
 
@@ -38,3 +40,17 @@ async def process_time_handler(request: Request, call_next):
 
 
 app.mount("/xml", rpc_api)
+
+
+def get_routes_rpc_api():
+    from routes import rpc
+    return rpc.return_routes_for_openapi()
+
+
+openapi_schema_rpc_api = get_openapi(
+    title="Rpc docs",
+    version="2.5.0",
+    description="Open Api custom",
+    routes=get_routes_rpc_api()
+)
+rpc_api.openapi_schema = openapi_schema_rpc_api
