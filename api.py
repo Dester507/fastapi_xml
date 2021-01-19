@@ -53,4 +53,5 @@ openapi_schema_rpc_api = get_openapi(
     description="Open Api custom",
     routes=get_routes_rpc_api()
 )
+
 rpc_api.openapi_schema = openapi_schema_rpc_api

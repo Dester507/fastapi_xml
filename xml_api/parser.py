@@ -26,7 +26,11 @@ async def handle_xml(xml_text):
         if response is None:
             return await create_bad_response("Method does not exist.")
         return await create_good_response(response)
-    except:
+    except TypeError as ex:
+        print(ex)
+        return await create_bad_response("Error with arguments")
+    except Exception as ex:
+        print(ex, type(ex))
         return await create_bad_response("Error with parse xml request.")
 
 
