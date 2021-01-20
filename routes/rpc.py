@@ -1,9 +1,7 @@
-import gzip
-from typing import Optional, Callable, List
+from typing import Optional
 
 from pydantic import BaseModel
-from fastapi import Body, APIRouter, Request, Response
-from fastapi.routing import APIRoute
+from fastapi import Body
 
 from api import rpc_api
 

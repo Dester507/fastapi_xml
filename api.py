@@ -1,5 +1,3 @@
-import gzip
-
 from fastapi import FastAPI, Request, Response
 from fastapi.responses import JSONResponse
 from fastapi.openapi.utils import get_openapi
