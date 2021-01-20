@@ -1,7 +1,9 @@
+import gzip
+from typing import Optional, Callable, List
+
 from pydantic import BaseModel
-from fastapi import Body, APIRouter, Request
+from fastapi import Body, APIRouter, Request, Response
 from fastapi.routing import APIRoute
-from typing import Optional
 
 from api import rpc_api
 
@@ -18,13 +20,9 @@ print(Foo.__fields__["name"]._type_display())
 '''
 
 
-class Fo(BaseModel):
-    qq: str
-
-
-@rpc_api.post("/hello/{msg}")
-async def hello_world(msg: str, ms: Fo):
-    return {"ms": ms.qq, "msg": msg}
+@rpc_api.post("/hello")
+async def hello_world():
+    return {"ms": "Hello world!"}
 
 
 @rpc_api.post("/say_gg")
@@ -39,9 +37,11 @@ async def say_gg(name: Optional[str], age: Optional[int], surname: Optional[str]
         return {"msg": "gg", "name": name, "age": age}
 
 
+'''
 print(dir(rpc_api.routes[4]))
-print(dir(rpc_api.routes[4].handle))
-print(rpc_api.routes[4].handle())
+print(dir(rpc_api.routes[4]))
+print(rpc_api.routes[4].get_route_handler())
+'''
 
 
 def return_routes_for_openapi():

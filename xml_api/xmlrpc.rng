@@ -3,7 +3,7 @@
 	This is a Relax NG schema for XML-RPC methodCall and methodResponse. It is
 	based on word written specification on http://xmlrpc.scripting.com/spec.
 
-	<dateTime.iso8601> type checking is not strict as in specification. A lot
+	<dateTime.iso8601> type_plugin checking is not strict as in specification. A lot
 	of applications use format yyyymmddThh:mm:ss. Higher application level
 	should deal with it.
 

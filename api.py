@@ -1,4 +1,6 @@
-from fastapi import FastAPI, Request
+import gzip
+
+from fastapi import FastAPI, Request, Response
 from fastapi.responses import JSONResponse
 from fastapi.openapi.utils import get_openapi
 
@@ -53,5 +55,22 @@ openapi_schema_rpc_api = get_openapi(
     description="Open Api custom",
     routes=get_routes_rpc_api()
 )
+
+'''
+class GzipRequest(Request):
+    async def body(self) -> bytes:
+        if not hasattr(self, "_body"):
+            body = await super().body()
+            if "gzip" in self.headers.getlist("Content-Encoding"):
+                body = gzip.decompress(body)
+            self._body = body
+        return self._body
+
+
+async def custom_route_handler(request: Request) -> Response:
+    orig = rpc_api.routes[4].get_route_handler()
+    request = GzipRequest(request.scope, request.receive)
+    return await orig(request)
+'''
 
 rpc_api.openapi_schema = openapi_schema_rpc_api

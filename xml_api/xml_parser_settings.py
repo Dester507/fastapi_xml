@@ -12,8 +12,8 @@ XML2PY_TYPES = {}
 
 @singledispatch
 def py2xml(value):
-    raise TypeError(("Can`t serialise type: {0}."
-                     " Add type {0} via decorator "
+    raise TypeError(("Can`t serialise type_plugin: {0}."
+                     " Add type_plugin {0} via decorator "
                      "@py2xml.register({0}) ").format(type(value)))
 
 

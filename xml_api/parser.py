@@ -8,7 +8,7 @@ from .xml_parser_settings import xml2py, schema
 
 async def handle_xml(xml_text):
     try:
-        from type import PathOperationFactory
+        from type_plugin import PathOperationFactory
         xml_request = await parser_run(xml_text)
         method_name = xml_request.xpath("//methodName[1]")[0].text
         kwargs = {}
