@@ -18,8 +18,11 @@ async def handle_xml(xml_text):
                 xml_request.xpath("//params/param/value")
             )
         )
-        if isinstance(args[-1], dict):
-            kwargs = args.pop(-1)
+        try:
+            if isinstance(args[-1], dict):
+                kwargs = args.pop(-1)
+        except IndexError:
+            kwargs = {}
         method_name = method_name.split('_', 1)
         method_namespace = f"routes.{method_name[0]}"
         response = await PathOperationFactory.factory(method_namespace, method_name[1], *args, **kwargs)

@@ -20,6 +20,7 @@ rpc_api = FastAPI(title="Support RPC-XML API", description="Mounted app for rpc-
 async def process_time_handler(request: Request, call_next):
     if request.url == "http://127.0.0.1:8000/xml/":
         try:
+            print(await request.body())
             xml_str = await request.body()
             response = await handle_xml(xml_str)
         except NameError:
