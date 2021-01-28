@@ -1,4 +1,4 @@
-from typing import Optional, Callable
+from typing import Optional
 
 from .plugin import load_plugins
 
@@ -9,8 +9,8 @@ PLUGINS = load_plugins(routes)
 
 class PathOperationFactory:
     @staticmethod
-    async def factory(namespace: str, method: str, *args, **kwargs) -> Optional[Callable]:
+    async def factory(namespace: str, method: str) -> Optional[bool]:
         try:
-            return await getattr(PLUGINS[namespace], method)(*args, **kwargs)
+            return getattr(PLUGINS[namespace], method)
         except (KeyError, AttributeError):
             return None

@@ -4,6 +4,10 @@ from pydantic import BaseModel
 
 from api import rpc_api
 
+from fastapi import APIRouter
+
+router = APIRouter()
+
 
 class Foo(BaseModel):
     name: str
@@ -19,25 +23,21 @@ print(Foo.__fields__["age"]._type_display())
 '''
 
 
-@rpc_api.post("/hello")
+@router.post("/hello")
 async def hello_world():
     return {"ms": "Hello world!"}
 
 
-@rpc_api.post("/say_gg")
-async def say_gg(user: Foo):
-    if user.surname and user.father:
-        return {"msg": "gg", "name": user.name, "age": user.age, "surname": user.surname, "father": user.father}
-    elif user.surname:
-        return {"msg": "gg", "name": user.name, "age": user.age, "surname": user.surname}
-    elif user.father:
-        return {"msg": "gg", "name": user.name, "age": user.age, "father": user.father}
+@router.post("/say_gg")
+async def say_gg(name: str, age: int, surname: Optional[str] = None, father: Optional[str] = None):
+    if surname and father:
+        return {"msg": "gg", "name": name, "age": age, "surname": surname, "father": father}
+    elif surname:
+        return {"msg": "gg", "name": name, "age": age, "surname": surname}
+    elif father:
+        return {"msg": "gg", "name": name, "age": age, "father": father}
     else:
-        return {"msg": "gg", "name": user.name, "age": user.age}
-
-
-print(rpc_api.url_path_for(name='say_gg'))
-print(rpc_api.url_path_for(name="hello_world"))
+        return {"msg": "gg", "name": name, "age": age}
 
 
 def return_routes_for_openapi():
