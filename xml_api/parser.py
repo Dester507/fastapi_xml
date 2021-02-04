@@ -38,7 +38,7 @@ async def handle_xml(xml_text):
             print(data)
             url_for_req = XML_URL + method_url
             print(url_for_req)
-            response = requests.post(url_for_req, data=data)
+            response = requests.post(url_for_req, data=data, headers={'user-agent': 'my-app/0.0.1'})
             print("there 3")
         else:
             return await create_bad_response("Method does not exist.")

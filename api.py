@@ -4,11 +4,8 @@ from fastapi.openapi.utils import get_openapi
 
 from xml_api.parser import handle_xml
 
-from routes.rpc import router
-
 
 app = FastAPI(title="Main API", description="Default api for simple requests")
-app.include_router(router, prefix='/rpc')
 
 
 @app.get('/hello')
@@ -19,7 +16,7 @@ def hello_main():
 rpc_api = FastAPI(title="Support RPC-XML API", description="Mounted app for rpc-xml requests", version="0.3.1")
 
 
-@rpc_api.middleware("http")
+@app.middleware("http")
 async def process_time_handler(request: Request, call_next):
     if request.url == "http://127.0.0.1:8000/xml/":
         try:
@@ -41,7 +38,7 @@ async def process_time_handler(request: Request, call_next):
         response = await call_next(request)
         return response
 
-print(rpc_api.routes)
+print(app.routes)
 
 app.mount("/xml", rpc_api)
 

@@ -4,10 +4,6 @@ from pydantic import BaseModel
 
 from api import rpc_api
 
-from fastapi import APIRouter
-
-router = APIRouter()
-
 
 class Foo(BaseModel):
     name: str
@@ -23,12 +19,12 @@ print(Foo.__fields__["age"]._type_display())
 '''
 
 
-@router.post("/hello")
+@rpc_api.post("/hello")
 async def hello_world():
     return {"ms": "Hello world!"}
 
 
-@router.post("/say_gg")
+@rpc_api.post("/say_gg")
 async def say_gg(name: str, age: int, surname: Optional[str] = None, father: Optional[str] = None):
     if surname and father:
         return {"msg": "gg", "name": name, "age": age, "surname": surname, "father": father}
