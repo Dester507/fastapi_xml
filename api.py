@@ -3,6 +3,7 @@ from fastapi.responses import JSONResponse
 from fastapi.openapi.utils import get_openapi
 
 from xml_api.parser import handle_xml
+from urllib.parse import urlparse
 
 
 app = FastAPI(title="Main API", description="Default api for simple requests")
@@ -22,7 +23,7 @@ async def process_time_handler(request: Request, call_next):
         try:
             xml_str = await request.body()
             full_path = await handle_xml(xml_str)
-            request.scope['path'] = '/xml/hello'
+            request.scope['path'] = urlparse(full_path).path
             response = await call_next(request)
         except NameError:
             return JSONResponse(status_code=404, content="Method does not exist")
@@ -56,21 +57,5 @@ openapi_schema_rpc_api = get_openapi(
     routes=get_routes_rpc_api()
 )
 
-'''
-class GzipRequest(Request):
-    async def body(self) -> bytes:
-        if not hasattr(self, "_body"):
-            body = await super().body()
-            if "gzip" in self.headers.getlist("Content-Encoding"):
-                body = gzip.decompress(body)
-            self._body = body
-        return self._body
-
-
-async def custom_route_handler(request: Request) -> Response:
-    orig = rpc_api.routes[4].get_route_handler()
-    request = GzipRequest(request.scope, request.receive)
-    return await orig(request)
-'''
 
 rpc_api.openapi_schema = openapi_schema_rpc_api
