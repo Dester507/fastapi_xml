@@ -10,7 +10,7 @@ app = FastAPI(title="Main API", description="Default api for simple requests")
 
 @app.get('/hello')
 def hello_main():
-    return {"msg": "Hello World!"}
+    return {"msg": "Hello World!This"}
 
 
 rpc_api = FastAPI(title="Support RPC-XML API", description="Mounted app for rpc-xml requests", version="0.3.1")
@@ -18,10 +18,12 @@ rpc_api = FastAPI(title="Support RPC-XML API", description="Mounted app for rpc-
 
 @app.middleware("http")
 async def process_time_handler(request: Request, call_next):
-    if request.url == "http://127.0.0.1:8000/xml/":
+    if request.url == "http://127.0.0.1:8000/xml/" or request.url == "http://127.0.0.1:8000/xml":
         try:
             xml_str = await request.body()
-            response = await handle_xml(xml_str)
+            full_path = await handle_xml(xml_str)
+            request.scope['path'] = '/xml/hello'
+            response = await call_next(request)
         except NameError:
             return JSONResponse(status_code=404, content="Method does not exist")
         except TypeError:
@@ -38,7 +40,6 @@ async def process_time_handler(request: Request, call_next):
         response = await call_next(request)
         return response
 
-print(app.routes)
 
 app.mount("/xml", rpc_api)
 

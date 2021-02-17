@@ -12,16 +12,14 @@ class Foo(BaseModel):
     father: Optional[str] = None
 
 
-'''
-print(dir(Foo.__fields__["name"]))
-print(Foo.__fields__)
-print(Foo.__fields__["age"]._type_display())
-'''
+@rpc_api.post("/test1")
+async def test1():
+    return {"msg": "Test1 good"}
 
 
 @rpc_api.post("/hello")
 async def hello_world():
-    return {"ms": "Hello world!"}
+    return {"ms": "Hello world! RPC"}
 
 
 @rpc_api.post("/say_gg")
