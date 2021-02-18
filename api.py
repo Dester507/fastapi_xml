@@ -21,10 +21,11 @@ rpc_api = FastAPI(title="Support RPC-XML API", description="Mounted app for rpc-
 async def process_time_handler(request: Request, call_next):
     if request.url == "http://127.0.0.1:8000/xml/" or request.url == "http://127.0.0.1:8000/xml":
         try:
-            xml_str = await request.body()
-            full_path = await handle_xml(xml_str)
-            request.scope['path'] = urlparse(full_path).path
+            #xml_str = await request.body()
+            #full_path = await handle_xml(xml_str)
+            request.scope['path'] = '/xml/rpc/hello_world'
             response = await call_next(request)
+            return response
         except NameError:
             return JSONResponse(status_code=404, content="Method does not exist")
         except TypeError:
