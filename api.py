@@ -5,6 +5,8 @@ from fastapi.openapi.utils import get_openapi
 from xml_api.parser import handle_xml
 from urllib.parse import urlparse
 
+from routes import rpc
+
 
 app = FastAPI(title="Main API", description="Default api for simple requests")
 
@@ -15,6 +17,8 @@ def hello_main():
 
 
 rpc_api = FastAPI(title="Support RPC-XML API", description="Mounted app for rpc-xml requests", version="0.3.1")
+
+rpc_api.include_router(rpc.router)
 
 
 @app.middleware("http")
@@ -46,6 +50,7 @@ async def process_time_handler(request: Request, call_next):
 app.mount("/xml", rpc_api)
 
 
+'''
 def get_routes_rpc_api():
     from routes import rpc
     return rpc.return_routes_for_openapi()
@@ -60,3 +65,4 @@ openapi_schema_rpc_api = get_openapi(
 
 
 rpc_api.openapi_schema = openapi_schema_rpc_api
+'''
